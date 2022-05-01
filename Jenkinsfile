@@ -24,9 +24,9 @@ pipeline {
         }
 
         stage('SonarQube report to PR') {
-            /* environment {
+            environment {
                 scannerHome = tool 'SonarQube Scanner'
-            } */
+            }
 
             steps {
                 reportSonarQubePullRequest()
@@ -37,9 +37,9 @@ pipeline {
             when {
                 branch 'develop' // Report to dashboard will be performed on develop branch only.
             }
-            /* environment {
+            environment {
                 scannerHome = tool 'SonarQube Scanner'
-            } */
+            }
 
             steps {
                 reportSonarQubeDashboard()
@@ -75,7 +75,9 @@ void reportSonarQubePullRequest() {
     script {
         if (env.CHANGE_ID) {
             pullRequestId = env.CHANGE_ID
-            echo "Reported to PR: ${pullRequestId}"
+            withSonarQubeEnv('SonarQube') {
+                sh '${scannerHome}/bin/sonar-scanner -X -Dsonar.github.pullRequest=$pullRequestId'
+            }
         }
     }
 }
@@ -83,7 +85,9 @@ void reportSonarQubePullRequest() {
 void reportSonarQubeDashboard() {
     script {
         if (!env.CHANGE_ID) {
-            echo "Reported to Dashboard"
+            withSonarQubeEnv('SonarQube') {
+                sh '${scannerHome}/bin/sonar-scanner'
+            }
         }
     }
 }
