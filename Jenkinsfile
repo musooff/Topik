@@ -34,9 +34,6 @@ pipeline {
         }
 
         stage('SonarQube report to Dashboard') {
-            when {
-                branch 'develop' // Report to dashboard will be performed on develop branch only.
-            }
             environment {
                 scannerHome = tool 'SonarQube Scanner'
             }
