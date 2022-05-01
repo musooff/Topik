@@ -93,8 +93,38 @@ void reportLintCoachPullRequest() {
 }
 
 void reportIssueDetailsPullRequest() {
-
+    script {
+        //maybeWriteBtsComment()
+        maybeWriteGitCommandComment()
+    }
 }
+
+void maybeWriteGitCommandComment() {
+    echo "Git command assistor : Check and write git command comment"
+    if (env.CHANGE_ID) {
+        def gitCommandCommentPrefix = "Git hint"
+        def prId = env.CHANGE_ID
+        def gitCommandCommentBody = gitCommandCommentPrefix + " : 변경사항을 로컬에서 확인하고 싶으면 다음 명령어를 활용해 주세요 " +
+                "\r\n`\$ git fetch origin pull/" +
+                prId +
+                "/head:pr/" +
+                prId +
+                " && git checkout pr/" +
+                prId +
+                "`"
+        alreadyWrittenCommentId = getCommentIdForAlreadyExist(gitCommandCommentPrefix)
+        if (alreadyWrittenCommentId != null) {
+            echo "Git hint : Comment edit : $alreadyWrittenCommentId :: $gitCommandCommentBody"
+            pullRequest.editComment(alreadyWrittenCommentId, gitCommandCommentBody)
+        } else {
+            echo "Git hint : Comment write : $gitCommandCommentBody"
+            pullRequest.comment(gitCommandCommentBody)
+        }
+    } else {
+        echo "Pass - Git command comment."
+    }
+}
+
 
 void cleanWorkspace() {
     cleanWs()
