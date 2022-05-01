@@ -24,9 +24,9 @@ pipeline {
         }
 
         stage('SonarQube report to PR') {
-            environment {
+            /* environment {
                 scannerHome = tool 'SonarQube Scanner'
-            }
+            } */
 
             steps {
                 reportSonarQubePullRequest()
@@ -37,9 +37,9 @@ pipeline {
             when {
                 branch 'develop' // Report to dashboard will be performed on develop branch only.
             }
-            environment {
+            /* environment {
                 scannerHome = tool 'SonarQube Scanner'
-            }
+            } */
 
             steps {
                 reportSonarQubeDashboard()
