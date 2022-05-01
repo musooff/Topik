@@ -73,7 +73,7 @@ pipeline {
 
 void reportSonarQubePullRequest() {
     script {
-        if (evn.CHANGE_ID) {
+        if (env.CHANGE_ID) {
             pullRequestId = env.CHANGE_ID
             echo "Reported to PR: ${pullRequestId}"
         }
