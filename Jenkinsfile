@@ -1,4 +1,8 @@
 pipeline {
+    triggers { issueCommentTrigger('.*test this please.*') }
+
+    options { disableConcurrentBuilds() }
+
     agent any
     stages {
         stage('Stage 1') {
