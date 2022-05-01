@@ -129,6 +129,17 @@ void maybeWriteGitCommandComment() {
     }
 }
 
+/**
+ * 특정 문자열이 포함된 comment를 찾아서 반환한다.
+ **/
+def getCommentIdForAlreadyExist(String checkContainsValue) {
+    for (comment in pullRequest.comments) {
+        String commentBody = comment.body
+        if (commentBody.contains(checkContainsValue)) {
+            return comment.id
+        }
+    }
+}
 
 void cleanWorkspace() {
     cleanWs()
