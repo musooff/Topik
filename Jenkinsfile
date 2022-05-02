@@ -69,6 +69,18 @@ void reportSonarQubePullRequest() {
     }
 }
 
+void addSonarQubeReviewComments() {
+     def response = httpRequest authentication:sonarqubeCredentials url:"https://fb41-221-141-140-219.jp.ngrok.io/api/issues/search?ps=10&componentKeys=musooff_Topik_AYB-ZFlS8-xhCYxQvxYf"
+     def jsonSlurper = new JsonSlurper()
+     def root = jsonSlurper.parseText(response.content)
+     for (commit in pullRequest.commits) {
+        echo "SHA: ${commit.sha}, Committer: ${commit.committer}, Commit Message: ${commit.message}"
+     }
+     root.issues.each { issue ->
+         pullRequest.reviewComment("c9c66a027a56ab655ab9106a5cc285cd4b9a51c7", issue.component.split(":")[1], issue.line, issue.message)
+     }
+ }
+
 void reportSonarQubeDashboard() {
     script {
         if (!env.CHANGE_ID) {
