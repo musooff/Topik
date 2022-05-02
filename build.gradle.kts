@@ -18,6 +18,7 @@ sonarqube {
         property("sonar.projectName", "Topik")
         property("sonar.host.url", "https://fb41-221-141-140-219.jp.ngrok.io")
         property("sonar.login", "2c1ea640cc3e441d11150f66391ab6cdaa41aee6")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${project.rootDir}/app/build/reports/coverage/androidTest/debug/report.xml")
     }
 }
 
