@@ -75,6 +75,7 @@ void reportSonarQubePullRequest() {
             withSonarQubeEnv('SonarQube') {
                 sh '${scannerHome}/bin/sonar-scanner -X -Dsonar.github.pullRequest=$pullRequestId'
             }
+            pullRequest.comment("Finished SonarQube report")
         }
     }
 }
