@@ -83,8 +83,8 @@ void addSonarQubeReviewComments() {
         def path = issue.component.split(":")[1]
         def line = issue.line
         def body = issue.message
-        if (!path || !line || !body) continue
-        pullRequest.reviewComment("c9c66a027a56ab655ab9106a5cc285cd4b9a51c7", issue.component.split(":")[1], issue.line, issue.message)
+        if (!path || !line || !body) return
+        pullRequest.reviewComment(env.GIT_PREVIOUS_COMMIT, path, line, body)
     }
 }
 
