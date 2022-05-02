@@ -24,20 +24,12 @@ pipeline {
         }
 
         stage('SonarQube report to PR') {
-            environment {
-                scannerHome = tool 'SonarQube Scanner'
-            }
-
             steps {
                 reportSonarQubePullRequest()
             }
         }
 
         stage('SonarQube report to Dashboard') {
-            environment {
-                scannerHome = tool 'SonarQube Scanner'
-            }
-
             steps {
                 reportSonarQubeDashboard()
             }
@@ -72,9 +64,7 @@ void reportSonarQubePullRequest() {
     script {
         if (env.CHANGE_ID) {
             pullRequestId = env.CHANGE_ID
-            withSonarQubeEnv('SonarQube') {
-                sh '${scannerHome}/bin/sonar-scanner -X -Dsonar.github.pullRequest=$pullRequestId'
-            }
+            sh './gradlew sonarqube -X -Dsonar.github.pullRequest=$pullRequestId'
             pullRequest.comment("Finished SonarQube report")
         }
     }
@@ -83,9 +73,7 @@ void reportSonarQubePullRequest() {
 void reportSonarQubeDashboard() {
     script {
         if (!env.CHANGE_ID) {
-            withSonarQubeEnv('SonarQube') {
-                sh '${scannerHome}/bin/sonar-scanner'
-            }
+            sh './gradlew sonarqube'
         }
     }
 }
