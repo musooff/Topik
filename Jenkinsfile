@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 pipeline {
     triggers { issueCommentTrigger('.*test this please.*') }
 
