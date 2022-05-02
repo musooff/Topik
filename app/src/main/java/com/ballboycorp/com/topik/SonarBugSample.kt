@@ -6,7 +6,7 @@ interface Sample {
     fun anotherMethod()
 }
 
-class SampleImpl(): Sample {
+class SampleImpl : Sample {
     override fun method() {
 
     }
