@@ -64,8 +64,7 @@ void reportSonarQubePullRequest() {
     script {
         if (env.CHANGE_ID) {
             pullRequestId = env.CHANGE_ID
-            sh './gradlew sonarqube -X -Dsonar.github.pullRequest=$pullRequestId'
-            pullRequest.comment("Finished SonarQube report")
+            sh './gradlew sonarqube -Dsonar.github.pullRequest=$pullRequestId'
         }
     }
 }
