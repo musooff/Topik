@@ -28,6 +28,7 @@ pipeline {
         stage('SonarQube report to PR') {
             steps {
                 reportSonarQubePullRequest()
+                addSonarQubeReviewComments()
             }
         }
 
