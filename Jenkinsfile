@@ -70,7 +70,7 @@ void reportSonarQubePullRequest() {
 }
 
 void addSonarQubeReviewComments() {
-     def response = httpRequest authentication:sonarqubeCredentials url:"https://fb41-221-141-140-219.jp.ngrok.io/api/issues/search?ps=10&componentKeys=musooff_Topik_AYB-ZFlS8-xhCYxQvxYf"
+     def response = httpRequest authentication: 'sonarqubeCredentials', url: "https://fb41-221-141-140-219.jp.ngrok.io/api/issues/search?ps=10&componentKeys=musooff_Topik_AYB-ZFlS8-xhCYxQvxYf"
      def jsonSlurper = new JsonSlurper()
      def root = jsonSlurper.parseText(response.content)
      for (commit in pullRequest.commits) {
