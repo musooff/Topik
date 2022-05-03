@@ -96,11 +96,7 @@ void addSonarQubeReviewComments() {
 
     // Remove resolved comments
     reviewComments.each { reviewComment ->
-        if (reviewComment.body !==~ /.*\[Details\]\(.*\)/) return
-
-        for (issue in issues) {
-
-        }
+        // if (reviewComment.body !==~ /.*\[Details\]\(.*\)/) return
     }
 }
 
