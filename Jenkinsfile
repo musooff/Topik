@@ -76,24 +76,31 @@ void addSonarQubeReviewComments() {
     def response = httpRequest authentication: 'sonarqubeCredentials', url: "https://fb41-221-141-140-219.jp.ngrok.io/api/issues/search?ps=10&componentKeys=musooff_Topik_AYB-ZFlS8-xhCYxQvxYf"
     def jsonSlurper = new JsonSlurper()
     def root = jsonSlurper.parseText(response.content)
-    for (comment in pullRequest.reviewComments) {
-        //comment.delete()
-    }
-    root.issues.each { issue ->
+
+    def reviewComments = pullRequest.reviewComments
+    def issues = root.issues
+    // Comment new issues
+    issues.each { issue ->
         def path = issue.component.split(":")[1]
         def line = issue.line
         def message = issue.message
         if (!path || !line || !message) return
         def key = issue.key
-        def issueLink = "([Details](https://fb41-221-141-140-219.jp.ngrok.io/project/issues?id=musooff_Topik_AYB-ZFlS8-xhCYxQvxYf&issues=${key}&open=${key}))"
+        def issueLink = "[Details](https://fb41-221-141-140-219.jp.ngrok.io/project/issues?id=musooff_Topik_AYB-ZFlS8-xhCYxQvxYf&issues=${key}&open=${key})"
         def body = "${message} ${issueLink}"
-        for (comment in pullRequest.reviewComments) {
-            if (comment.body == body) {
-                println(comment)
-                return
-            }
+        for (comment in reviewComments) {
+            if (comment.body == body) return
         }
         pullRequest.reviewComment(env.GIT_PREVIOUS_COMMIT, path, line, body)
+    }
+
+    // Remove resolved comments
+    reviewComments.each { reviewComment ->
+        if (reviewComment.body !==~ /.*\[Details\]\(.*\)/) return
+
+        for (issue in issues) {
+
+        }
     }
 }
 
