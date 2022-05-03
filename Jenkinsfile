@@ -76,14 +76,20 @@ void addSonarQubeReviewComments() {
     def response = httpRequest authentication: 'sonarqubeCredentials', url: "https://fb41-221-141-140-219.jp.ngrok.io/api/issues/search?ps=10&componentKeys=musooff_Topik_AYB-ZFlS8-xhCYxQvxYf"
     def jsonSlurper = new JsonSlurper()
     def root = jsonSlurper.parseText(response.content)
-    for (commit in pullRequest.commits) {
-        echo "SHA: ${commit.sha}, Committer: ${commit.committer}, Commit Message: ${commit.message}"
+    for (comment in pullRequest.comments) {
+        comment.delete()
     }
     root.issues.each { issue ->
         def path = issue.component.split(":")[1]
         def line = issue.line
-        def body = issue.message
-        if (!path || !line || !body) return
+        def message = issue.message
+        if (!path || !line || !message) return
+        def key = issue.key
+        def issueLink = "([Details](https://fb41-221-141-140-219.jp.ngrok.io/project/issues?id=musooff_Topik_AYB-ZFlS8-xhCYxQvxYf&issues=${key}&open=${key}))"
+        def body = "${message} ${issue}"
+        for (comment in pullRequest.comments) {
+            if (comment.body == body) return
+        }
         pullRequest.reviewComment(env.GIT_PREVIOUS_COMMIT, path, line, body)
     }
 }
