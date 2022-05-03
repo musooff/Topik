@@ -13,7 +13,6 @@ class SampleImpl : Sample {
 
     override fun anotherMethod() {
         var some = 1
-        some = some
     }
 
 }
